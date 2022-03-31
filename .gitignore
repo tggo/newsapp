@@ -1,0 +1,46 @@
+### General ###
+.DS_Store
+.AppleDouble
+.LSOverride
+
+### Go ###
+# Binaries
+bin/
+*.exe
+*.exe~
+*.dll
+*.so
+*.dylib
+# Testing
+*.test
+ 4
+*.log
+*.out
+codeclimate.json
+
+### Editors ###
+**/.idea/*
+.idea/
+.idea_modules/
+atlassian-ide-plugin.xml
+.vscode
+*.swp
+*.swo
+
+### Other ###
+coverage.html
+coverage.cov
+.env
+profile.cov
+**/tmp/*
+/liquibase.properties
+
+README.my
+.env.test
+dump/*
+gen/
+/bin/
+
+/tests/http-client.private.env.json
+/.testCoverage.txt
+/report.xml

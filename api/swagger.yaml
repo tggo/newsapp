@@ -1,0 +1,133 @@
+openapi: "3.0.0"
+info:
+  title: Boosters news server API
+  version: "0.0.1"
+  description: Implement API test server
+  termsOfService: https://en.wikipedia.org/wiki/Terms_of_service
+  license:
+    name: Apache 2.0
+servers:
+  - url: /
+    description: localtest
+  - url: https:/development.server.com/{basePath}
+    description: Development Server
+    variables:
+      basePath:
+        default: v1
+  - url: https://booster.news.com/{basePath}
+    description: Production Server
+    variables:
+      basePath:
+        default: v1
+tags:
+  - name: News
+    description:
+      all about news posts
+
+paths:
+  /posts:
+    post:
+      tags:
+        - News
+      summary: Create News post
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/NewsPostRequestBody'
+      responses:
+        200:
+          description: successful response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SuccessResponse'
+
+components:
+  securitySchemes:
+    bearerAuth:
+      type: http #allowedValues: apiKey, http, oauth2, openIdConnect
+      scheme: bearer
+      bearerFormat: JWT    # optional, arbitrary value for documentation purposes
+  schemas:
+    SuccessResponse:
+      type: object
+      required:
+        - status
+      properties:
+        status:
+          type: string
+          example: OK
+          description: Request status.
+        message:
+          type: string
+          description: information description
+        data:
+          type: object
+          description: any data response, if need
+    NewsPostRequestBody:
+      $ref: '#/components/schemas/Post'
+    Post:
+      type: object
+      properties:
+        id:
+          type: integer
+          description: Recipe ID
+        image_url:
+          type: string
+          description: Main Image URL
+        created_at:
+          type: integer
+          description: created at timestamp
+          format: int64
+        slug:
+          type: string
+          description: slug
+        title:
+          type: string
+          description: blog title
+        heading:
+          type: string
+          description: blog heading
+        content:
+          type: string
+          description: blog content, can be empty on blogs list
+    BadRequestSchema:
+      type: object
+      required:
+        - status
+      properties:
+        status:
+          type: string
+          example: ERROR
+          description: Request status.
+        message:
+          type: string
+          description: error description
+        data:
+          type: object
+          description: Data
+          properties:
+            errors:
+              type: object
+              description: error object
+
+
+  responses:
+    BadRequestError:
+      description: Query or path params invalid
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/BadRequestSchema'
+          example:
+            status: fail
+            message: description of error
+    SuccessResponse:
+      description: Success response
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/SuccessResponse'
+          example:
+            status: OK
