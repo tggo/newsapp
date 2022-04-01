@@ -88,8 +88,8 @@ func RecoveryWithZap(logger *zap.Logger, stack bool) gin.HandlerFunc {
 					}
 				}
 
-				httpRequest, _ := httputil.DumpRequest(c.Request, false)
-				if brokenPipe {
+				httpRequest, errDump := httputil.DumpRequest(c.Request, false)
+				if brokenPipe && errDump == nil {
 					logger.Error(c.Request.URL.Path,
 						zap.Any("error", err),
 						zap.String("request", string(httpRequest)),

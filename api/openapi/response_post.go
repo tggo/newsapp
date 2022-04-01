@@ -11,24 +11,18 @@ package openapi
 
 type Post struct {
 
-	// Recipe ID
-	Id int32 `json:"id,omitempty"`
-
-	// Main Image URL
-	ImageUrl string `json:"image_url,omitempty"`
+	// Post ID
+	Id int64 `json:"id" binding:"required"`
 
 	// created at timestamp
-	CreatedAt int64 `json:"created_at,omitempty"`
+	CreatedAt int64 `json:"created_at" binding:"required"`
 
-	// slug
-	Slug string `json:"slug,omitempty"`
+	// created at timestamp
+	UpdatedAt int64 `json:"updated_at,omitempty"`
 
-	// blog title
-	Title string `json:"title,omitempty"`
+	// post title
+	Title string `json:"title" binding:"required"`
 
-	// blog heading
-	Heading string `json:"heading,omitempty"`
-
-	// blog content, can be empty on blogs list
-	Content string `json:"content,omitempty"`
+	// post content, can be empty on post list
+	Content string `json:"content" binding:"required"`
 }

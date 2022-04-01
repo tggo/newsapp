@@ -24,7 +24,7 @@ ARG BUILD_NUMBER
 RUN go build  -o /build/news-server -ldflags " -X main.appName=$APP_NAME -X main.release=$APP_VERSION  -X main.gitHash=$GIT_HASH -X main.buildDate=$BUILD_DATE -X main.buildNumber=$BUILD_NUMBER " ./cmd/server
 
 ######## Second stage: from scratch #######
-FROM alpine:3.15.3 AS final
+FROM alpine:3.12 AS final
 
 # timezone
 ENV TZ=Etc/GMT
@@ -44,4 +44,4 @@ COPY --from=build-env /etc/ssl/certs/ca-certificates.crt /etc/ssl/certs/
 COPY --from=build-env /build/news-server /bin
 
 # Run the compiled binary.
-ENTRYPOINT ["/news-server"]
+ENTRYPOINT ["news-server"]

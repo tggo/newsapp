@@ -5,7 +5,11 @@ import (
 	"math/rand"
 	"time"
 
+	"boostersNews/cmd/server/app"
 	"boostersNews/internal/app/config"
+	"boostersNews/internal/app/repository"
+	service "boostersNews/internal/app/services"
+	newsService "boostersNews/internal/news/service"
 	ll "boostersNews/pkg/logger"
 
 	"github.com/chapsuk/grace"
@@ -23,7 +27,6 @@ var (
 func main() {
 	rand.Seed(time.Now().UnixNano()) // some time we generate random data
 	ctx := grace.ShutdownContext(context.Background())
-
 	configuration := config.NewConfig()
 
 	logger, err := ll.New(appName, configuration.Environment, release, buildDate, buildNumber, gitHash)
@@ -36,5 +39,10 @@ func main() {
 		zap.String("buildNumber", buildNumber),
 	)
 
-	_ = ctx
+	postgresRepos := repository.InitPostgres(ctx, configuration.Databases, logger)
+	services := service.NewServices(logger)
+	services.SetNews(newsService.NewService(postgresRepos.GetNews(), logger))
+	appObj := app.New(configuration, services, logger)
+	appObj.Run(ctx)
+
 }

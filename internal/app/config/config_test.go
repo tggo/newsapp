@@ -15,7 +15,7 @@ func TestConfigurationFromEnv(t *testing.T) {
 	// })
 
 	t.Run("from env variables", func(t *testing.T) {
-		_ = os.Setenv("MYSQL_URL", "goLogTest")
+		_ = os.Setenv("POSTGRES_URL", "goLogTest")
 
 		cfg := NewConfig()
 		require.Equal(t, "goLogTest", cfg.Databases.PostgresURL)

@@ -9,9 +9,6 @@
 
 package openapi
 
-// BadRequestSchemaData - Data
-type BadRequestSchemaData struct {
-
-	// error object
-	Errors map[string]interface{} `json:"errors,omitempty"`
+type ListPostsResponse struct {
+	Posts []Post `json:"posts,omitempty"`
 }

@@ -35,7 +35,7 @@ func ResponseError(c *gin.Context, status int, logErr error, logComment, msgToUs
 		zap.Any("header", c.Request.Header),
 		zap.Any("request_params", c.Params))
 
-	ResponseJSON(c, status, openapiClient.BadRequestSchema{
+	ResponseJSON(c, status, openapiClient.BadResponse{
 		Status:  errors.StatusError,
 		Message: msgToUserDisplay,
 	})

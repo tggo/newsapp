@@ -11,26 +11,21 @@ services:
       POSTGRES_USER: boosterdev
       POSTGRES_PASSWORD: mysecretpassword
     ports:
-      - 5441:5432
+      - 5442:5432
 
-
-  backend-main:
+  app:
     container_name: backend-main
-    hostname: backend-main
+    hostname: app
     restart: always
     build:
       context: ""
-      dockerfile: .cicd/build/main/Dockerfile
-    volumes:
-      - ./configs:/configs
-      - /var/log/scouts3000:/var/log/scouts3000
+      dockerfile: .cicd/build/Dockerfile
     environment:
       ENV: dev
-      DATABASE_URL: postgres://boosterdev:mysecretpassword@database:5432/boosternews
+      POSTGRES_URL: postgres://boosterdev:mysecretpassword@database:5432/boostersnews
       HTTP_HOST_ADDR: :8080
-      KAFKA_ADDR: kafka-service:9092
     ports:
       - 48011:8080
     depends_on:
-      - database
+      - db
 

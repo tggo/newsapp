@@ -23,8 +23,9 @@ type S3storage struct {
 }
 
 type Databases struct {
-	PostgresURL  string `envconfig:"POSTGRES_URL"`
-	ReIndexerURL string `envconfig:"REINDEXER_URL"` // <reindexer_host_url>
+	PostgresURL      string `envconfig:"POSTGRES_URL"`
+	MigrateEnable    bool   `envconfig:"MIGRATE_ENABLE"`
+	MigrateDirectory string `envconfig:"MIGRATE_DIRECTORY" default:"file://.cicd/deploy/migrate"`
 }
 
 type Emails struct {

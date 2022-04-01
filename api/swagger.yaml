@@ -29,7 +29,7 @@ paths:
     post:
       tags:
         - News
-      summary: Create News post
+      summary: Create news post
       requestBody:
         content:
           application/json:
@@ -42,14 +42,133 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/SuccessResponse'
+    get:
+      tags:
+        - News
+      summary: Get news list
+      responses:
+        200:
+          description: return list posts
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ListPostsResponse'
+  /posts/{id}:
+    put:
+      tags:
+        - News
+      summary: Update news post
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema:
+            type: integer
+            description: Post ID
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/NewsPostRequestBody'
+      responses:
+        200:
+          $ref: "#/components/responses/SuccessResponse"
+        400:
+          $ref: "#/components/responses/BadRequestError"
+        404:
+          $ref: "#/components/responses/NotFoundError"
+
+    get:
+      tags:
+        - News
+      summary: Get one news post
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema:
+            type: integer
+            description: Post ID
+      responses:
+        200:
+          description: successful response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/OnePostResponse'
+        400:
+          $ref: "#/components/responses/BadRequestError"
+        404:
+          $ref: "#/components/responses/NotFoundError"
+
+    delete:
+      tags:
+        - News
+      summary: Delete news post
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema:
+            type: integer
+            description: Post ID
+      responses:
+        200:
+          $ref: "#/components/responses/SuccessResponse"
+        400:
+          $ref: "#/components/responses/BadRequestError"
+        404:
+          $ref: "#/components/responses/NotFoundError"
+
+
 
 components:
-  securitySchemes:
-    bearerAuth:
-      type: http #allowedValues: apiKey, http, oauth2, openIdConnect
-      scheme: bearer
-      bearerFormat: JWT    # optional, arbitrary value for documentation purposes
   schemas:
+    NewsPostRequestBody:
+      $ref: '#/components/schemas/Post'
+    Post:
+      type: object
+      required:
+        - id
+        - title
+        - content
+        - created_at
+      properties:
+        id:
+          type: integer
+          description: Post ID
+          format: int64
+          x-go-custom-tag: binding:"required"
+          x-go-name: ID
+        created_at:
+          type: integer
+          description: created at timestamp
+          x-go-custom-tag: binding:"required"
+          format: int64
+        updated_at:
+          type: integer
+          description: created at timestamp
+          format: int64
+        title:
+          type: string
+          x-go-custom-tag: binding:"required"
+          description: post title
+        content:
+          type: string
+          x-go-custom-tag: binding:"required"
+          description: post content, can be empty on post list
+    OnePostResponse:
+      type: object
+      properties:
+        post:
+          $ref: '#/components/schemas/Post'
+    ListPostsResponse:
+      type: object
+      properties:
+        posts:
+          type: array
+          items:
+            $ref: '#/components/schemas/Post'
     SuccessResponse:
       type: object
       required:
@@ -65,34 +184,7 @@ components:
         data:
           type: object
           description: any data response, if need
-    NewsPostRequestBody:
-      $ref: '#/components/schemas/Post'
-    Post:
-      type: object
-      properties:
-        id:
-          type: integer
-          description: Recipe ID
-        image_url:
-          type: string
-          description: Main Image URL
-        created_at:
-          type: integer
-          description: created at timestamp
-          format: int64
-        slug:
-          type: string
-          description: slug
-        title:
-          type: string
-          description: blog title
-        heading:
-          type: string
-          description: blog heading
-        content:
-          type: string
-          description: blog content, can be empty on blogs list
-    BadRequestSchema:
+    BadResponse:
       type: object
       required:
         - status
@@ -114,14 +206,24 @@ components:
 
 
   responses:
+    NotFoundError:
+      description: ID in request not found
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/BadResponse'
+          example:
+            status: ERROR
+            message: ID not found
+
     BadRequestError:
       description: Query or path params invalid
       content:
         application/json:
           schema:
-            $ref: '#/components/schemas/BadRequestSchema'
+            $ref: '#/components/schemas/BadResponse'
           example:
-            status: fail
+            status: ERROR
             message: description of error
     SuccessResponse:
       description: Success response

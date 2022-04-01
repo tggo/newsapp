@@ -9,7 +9,7 @@
 
 package openapi
 
-type BadRequestSchema struct {
+type BadResponse struct {
 
 	// Request status.
 	Status string `json:"status"`
@@ -17,5 +17,5 @@ type BadRequestSchema struct {
 	// error description
 	Message string `json:"message,omitempty"`
 
-	Data BadRequestSchemaData `json:"data,omitempty"`
+	Data BadResponseData `json:"data,omitempty"`
 }
