@@ -34,7 +34,7 @@ paths:
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/NewsPostRequestBody'
+              $ref: '#/components/schemas/PostCreate'
       responses:
         200:
           description: successful response
@@ -69,7 +69,7 @@ paths:
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/NewsPostRequestBody'
+              $ref: '#/components/schemas/PostUpdate'
       responses:
         200:
           $ref: "#/components/responses/SuccessResponse"
@@ -124,8 +124,48 @@ paths:
 
 components:
   schemas:
-    NewsPostRequestBody:
-      $ref: '#/components/schemas/Post'
+    PostCreate:
+      type: object
+      required:
+        - title
+        - content
+      properties:
+        created_at:
+          type: integer
+          description: created at timestamp
+          format: int64
+        title:
+          type: string
+          x-go-custom-tag: binding:"required"
+          description: post title
+        content:
+          type: string
+          x-go-custom-tag: binding:"required"
+          description: post content, can be empty on post list
+    PostUpdate:
+      type: object
+      required:
+        - title
+        - content
+        - created_at
+        - updated_at
+      properties:
+        created_at:
+          type: integer
+          description: created at timestamp
+          format: int64
+        updated_at:
+          type: integer
+          description: created at timestamp
+          format: int64
+        title:
+          type: string
+          x-go-custom-tag: binding:"required"
+          description: post title
+        content:
+          type: string
+          x-go-custom-tag: binding:"required"
+          description: post content, can be empty on post list
     Post:
       type: object
       required:
@@ -138,12 +178,9 @@ components:
           type: integer
           description: Post ID
           format: int64
-          x-go-custom-tag: binding:"required"
-          x-go-name: ID
         created_at:
           type: integer
           description: created at timestamp
-          x-go-custom-tag: binding:"required"
           format: int64
         updated_at:
           type: integer

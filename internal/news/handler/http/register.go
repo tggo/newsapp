@@ -14,6 +14,7 @@ func Register(router gin.IRouter, service service.Service, logger *zap.Logger) {
 	router.POST("posts", h.create)
 	router.GET("posts", h.list)
 
+	router.GET("posts/:id", h.get)
 	router.PUT("posts/:id", h.update)
 	router.DELETE("posts/:id", h.delete)
 }

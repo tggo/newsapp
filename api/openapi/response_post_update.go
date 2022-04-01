@@ -9,16 +9,13 @@
 
 package openapi
 
-type Post struct {
-
-	// Post ID
-	Id int64 `json:"id"`
+type PostUpdate struct {
 
 	// created at timestamp
 	CreatedAt int64 `json:"created_at"`
 
 	// created at timestamp
-	UpdatedAt int64 `json:"updated_at,omitempty"`
+	UpdatedAt int64 `json:"updated_at"`
 
 	// post title
 	Title string `json:"title" binding:"required"`

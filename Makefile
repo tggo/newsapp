@@ -37,7 +37,10 @@ image: ## Build docker image with app
 	@printf "\n   \e[30;42m %s \033[0m\n\n" 'Now you can use image like `docker run --rm $(APP_NAME):local ...`';
 
 build: ## Build app binary file
-	$(DC_BIN) run $(DC_RUN_ARGS) --no-deps app go build -ldflags=$(LDFLAGS) .
+	$(DC_BIN) build
+
+run: build ## Start app
+	$(DC_BIN) up
 
 shell: ## Start shell into container with golang
 	$(DC_BIN) run $(DC_RUN_ARGS) app sh
@@ -69,6 +72,13 @@ test_ci:
 	go test -count=1 -timeout=160s -short -v ${PKG_LIST} 2>&1 | $(GOPATH)/bin/go-junit-report -set-exit-code > report.xml
 	go test -count=1  ${PKG_LIST} -short -v -coverprofile .testCoverage.txt
 
+generate_mocks: ## generate specific mocks via go-mockery
+	@echo "use go-mockery: brew install mockery"
+	mockery \
+		--name Service --dir ./internal/news/service   --output ./internal/news/mocks --case snake
+	mockery \
+		--name Repository --dir ./internal/news   --output ./internal/news/mocks --case snake
+
 generate_swagger_api:
 	## via docker
 	$(DOCKER_BIN) run --rm -v "${PWD}/api:/api" openapitools/openapi-generator-cli generate \
@@ -78,6 +88,7 @@ generate_swagger_api:
 	## via local installed
 	#openapi-generator generate -g go-gin-server -i ./api/swagger.yaml -o ./gen
 	find $(shell pwd)/api/gen/go -type f -name "model_post*.go" | sed -e "p;s/model_/response_/" | xargs -n2 cp
+	find $(shell pwd)/api/gen/go -type f -name "model_one*.go" | sed -e "p;s/model_/response_/" | xargs -n2 cp
 	find $(shell pwd)/api/gen/go -type f -name "model_list*.go" | sed -e "p;s/model_/response_/" | xargs -n2 cp
 	find $(shell pwd)/api/gen/go -type f -name "model_bad*.go" | sed -e "p;s/model_/response_/" | xargs -n2 cp
 	find $(shell pwd)/api/gen/go -type f -name "model_success*.go" | sed -e "p;s/model_/response_/" | xargs -n2 cp

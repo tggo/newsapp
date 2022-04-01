@@ -1,3 +1,11 @@
+#
+
+## starting app
+
+```
+make run
+``` 
+
 ## DB 
 
 Start docker container for local development
@@ -22,7 +30,7 @@ migrate create -ext sql -dir .cicd/deploy/migrate -seq create_posts_table
 
 ## Environment variables
 
-Variables load via config ./internal/app/config
+Variables load via config [internal/app/config](internal/app/config)
 
 Sample .env
 ```dotenv
@@ -31,3 +39,12 @@ POSTGRES_URL=postgres://boosterdev:mysecretpassword@localhost:5442/boostersnews?
 MIGRATE_ENABLE=true
 MIGRATE_DIRECTORY=file://.cicd/deploy/migrate
 ```
+
+
+## Metrics
+
+Collect PostgreSQL metrics, check in [pkg/helpers/metrics.go](pkg/helpers/metrics.go).
+Also default Gin metrics via [github.com/zsais/go-gin-prometheus](http://github.com/zsais/go-gin-prometheus)
+
+Available at [/metrics](http://localhost:8095/metrics)
+

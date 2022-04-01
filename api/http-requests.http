@@ -1,0 +1,26 @@
+### create post
+POST http://localhost:8095/posts
+Content-Type: application/json
+
+{
+  "title": "second post",
+  "content": "post content"
+}
+
+### get posts
+GET http://localhost:8095/posts
+
+### fetch one post
+GET http://localhost:8095/posts/1
+
+### delete  post
+DELETE http://localhost:8095/posts/2
+
+### update post
+PUT http://localhost:8095/posts/3
+Content-Type: application/json
+
+{
+  "title": "third post",
+  "content": "post content"
+}

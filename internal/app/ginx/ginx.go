@@ -17,6 +17,17 @@ const (
 	LoggerReqBodyKey = prefix + "/logger-req-body"
 )
 
+func Bind(ctx *gin.Context, filter interface{}) error {
+	if ctx.ContentType() == "application/json" {
+		if err := ctx.BindJSON(filter); err != nil {
+			return err
+		}
+	} else if err := ctx.BindQuery(filter); err != nil {
+		return err
+	}
+	return nil
+}
+
 func ResponseOK(c *gin.Context, data ...interface{}) {
 	if len(data) > 0 {
 		v := make(map[string]interface{})

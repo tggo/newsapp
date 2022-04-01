@@ -5,14 +5,15 @@ create table jrnl_posts
             primary key,
     created_at timestamp without time zone default now() not null,
     updated_at timestamp without time zone,
+    deleted_at timestamp without time zone,
     title      text                                      not null,
     body       text                                      not null
 );
 
 comment on table jrnl_posts is 'news posts';
 
-create unique index jrnl_posts_id_uindex
-    on jrnl_posts (id);
+create unique index jrnl_posts_id_deleted_at_uindex
+    on jrnl_posts (id, deleted_at);
 
 insert into jrnl_posts(title, body) VALUES(
     'Neque porro quisquam est qui dolorem ipsum quia dolor sit amet, consectetur, adipisci velit...',
